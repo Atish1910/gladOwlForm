@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Carousel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .carousel {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            overflow: hidden;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .carousel-images {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Space between rows */
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 10px; /* Space between images */
+            transition: transform 0.5s ease-in-out;
+            white-space: nowrap;
+            flex: 1 0 auto;
+        }
+
+        .carousel-track img {
+            width: calc(100% / 9 - 10px); /* Adjust width for 9 images per row */
+            height: 100px; /* Set image height */
+            object-fit: cover;
+            margin: 5px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel">
+        <button class="prev">&#10094;</button>
+        <div class="carousel-images">
+            <!-- First Row of Images -->
+            <div class="carousel-track" id="track1">
+                <img src="img/1.jpg" alt="Image 1">
+                <img src="img/2.jpg" alt="Image 2">
+                <img src="img/3.jpg" alt="Image 3">
+                <img src="img/4.jpg" alt="Image 4">
+                <img src="img/5.jpg" alt="Image 5">
+                <img src="img/6.jpg" alt="Image 6">
+                <img src="img/7.jpg" alt="Image 7">
+                <img src="img/8.jpg" alt="Image 8">
+                <img src="img/9.jpg" alt="Image 9">
+                <img src="img/10.jpg" alt="Image 10">
+                <img src="img/11.jpg" alt="Image 11">
+                <img src="img/12.jpg" alt="Image 12">
+                <img src="img/13.jpg" alt="Image 13">
+                <img src="img/14.jpg" alt="Image 14">
+                <img src="img/15.jpg" alt="Image 15">
+                <img src="img/16.jpg" alt="Image 16">
+                <img src="img/17.jpg" alt="Image 17">
+                <img src="img/18.jpg" alt="Image 18">
+            </div>
+            <!-- Second Row of Images -->
+            <div class="carousel-track" id="track2">
+                <img src="img/10.jpg" alt="Image 10">
+                <img src="img/11.jpg" alt="Image 11">
+                <img src="img/12.jpg" alt="Image 12">
+                <img src="img/13.jpg" alt="Image 13">
+                <img src="img/14.jpg" alt="Image 14">
+                <img src="img/15.jpg" alt="Image 15">
+                <img src="img/16.jpg" alt="Image 16">
+                <img src="img/17.jpg" alt="Image 17">
+                <img src="img/18.jpg" alt="Image 18">
+                <img src="img/1.jpg" alt="Image 1">
+                <img src="img/2.jpg" alt="Image 2">
+                <img src="img/3.jpg" alt="Image 3">
+                <img src="img/4.jpg" alt="Image 4">
+                <img src="img/5.jpg" alt="Image 5">
+                <img src="img/6.jpg" alt="Image 6">
+                <img src="img/7.jpg" alt="Image 7">
+                <img src="img/8.jpg" alt="Image 8">
+                <img src="img/9.jpg" alt="Image 9">
+            </div>
+        </div>
+        <button class="next">&#10095;</button>
+    </div>
+
+    <script>
+        const track1 = document.getElementById('track1');
+        const track2 = document.getElementById('track2');
+        const images1 = track1.querySelectorAll('img');
+        const images2 = track2.querySelectorAll('img');
+        const imageWidth = images1[0].clientWidth + 10; // Width of item including margin
+        const totalImages1 = images1.length;
+        const totalImages2 = images2.length;
+        let currentIndex = 0;
+        let autoSlide;
+
+        function updateTrackWidth() {
+            track1.style.width = `${imageWidth * totalImages1}px`;
+            track2.style.width = `${imageWidth * totalImages2}px`;
+        }
+
+        function moveToNextSlide() {
+            currentIndex++;
+            if (currentIndex >= totalImages1) {
+                currentIndex = 0; // Reset to the first image
+            }
+            track1.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+            track2.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+        }
+
+        function startAutoSlide() {
+            autoSlide = setInterval(moveToNextSlide, 2000); // Change slide every 2 seconds
+        }
+
+        function stopAutoSlide() {
+            clearInterval(autoSlide);
+        }
+
+        // Update track width on load
+        updateTrackWidth();
+
+        // Start the slider
+        startAutoSlide();
+
+        // Stop the slider on hover and resume on mouse out
+        document.querySelector('.carousel').addEventListener('mouseover', stopAutoSlide);
+        document.querySelector('.carousel').addEventListener('mouseout', startAutoSlide);
+
+        // Navigation buttons
+        document.querySelector('.next').addEventListener('click', moveToNextSlide);
+        document.querySelector('.prev').addEventListener('click', () => {
+            currentIndex--;
+            if (currentIndex < 18) {
+                currentIndex = totalImages1 - 1; // Go to the last image
+            }
+            track1.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+            track2.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+        });
+    </script>
+</body>
+</html>
